@@ -6,6 +6,7 @@ import fetch from "node-fetch";
 http.createServer(async (request, response) => {
     response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     
+    console.log("Getting target...")
     const target = new URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
         response.end(JSON.stringify({

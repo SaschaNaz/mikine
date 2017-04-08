@@ -14,6 +14,7 @@ const cardinal = require("card-inal");
 const node_fetch_1 = require("node-fetch");
 http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
     response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+    console.log("Getting target...");
     const target = new url_1.URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
         response.end(JSON.stringify({

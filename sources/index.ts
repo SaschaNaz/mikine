@@ -35,7 +35,22 @@ http.createServer(async (request, response) => {
         return;
     }
 
-    const allowed = await bot.isAllowed("Twitterbot", target);
+    let allowed;
+    try {
+        allowed = await bot.isAllowed("Twitterbot", target);
+    }
+    catch (e) {
+        if (e.status >= 500) {
+            response.end(JSON.stringify({
+                message: "Couldn't access robots.txt info to be allowed",
+                errorType: "network"
+            }));
+            return;
+        }
+        else {
+            allowed = true;
+        }
+    }
     if (!allowed) {
         response.end(JSON.stringify({
             message: "Blocked by robots.txt",

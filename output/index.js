@@ -46,14 +46,14 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
             }));
             return;
         }
-        console.log(`Fetching success`);
+        console.log(`Fetching success for ${target}`);
         let card;
         try {
             console.log(`Parsing...`);
             card = cardinal.parse(yield fetchResponse.text(), url.hostname);
         }
         catch (e) {
-            console.log(`Parser failed`);
+            console.log(`Parser failed for ${target}`);
             response.end(JSON.stringify({
                 message: e.message,
                 errorType: "card"
@@ -61,20 +61,20 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
             return;
         }
         if (!card) {
-            console.log(`Parser didn't find any cards`);
+            console.log(`Parser didn't find any cards for ${target}`);
             response.end(JSON.stringify({
                 message: "No Twitter Card exists",
                 errorType: "normal",
             }));
         }
-        console.log(`Parser found a card`);
+        console.log(`Parser found a card for ${target}`);
         response.end(JSON.stringify({
             data: card,
             errorType: "normal"
         }));
     }
     catch (e) {
-        console.log(`Fetching failed`);
+        console.log(`Fetching failed for ${target}`);
         response.end(JSON.stringify({
             error: `Failed to fetch ${target} because of network issue`,
             errorType: "network"

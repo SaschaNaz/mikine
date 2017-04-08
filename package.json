@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ."
   },
+  "engines": {
+    "node": "7.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SaschaNaz/mikine.git"

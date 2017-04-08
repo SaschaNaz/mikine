@@ -2,10 +2,9 @@
   "name": "mikine",
   "version": "0.0.1",
   "description": "Pixiv previewer for Twitter and Open Graph-supported services",
-  "main": "index.js",
+  "main": "output/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node output/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

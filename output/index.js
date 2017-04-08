@@ -17,12 +17,11 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
     console.log("Getting target...");
     const target = new url_1.URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
-        response.end(JSON.stringify({
-            message: "`target` parameter is required.",
-            errorType: "request"
-        }));
+        response.writeHead(302, { "Location": "https://github.com/saschanaz/mikine" });
+        response.end();
         return;
     }
+    response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     let url;
     try {
         url = new url_1.URL(target);

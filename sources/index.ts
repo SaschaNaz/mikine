@@ -9,12 +9,12 @@ http.createServer(async (request, response) => {
     console.log("Getting target...")
     const target = new URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
-        response.end(JSON.stringify({
-            message: "`target` parameter is required.",
-            errorType: "request"
-        }));
+        response.writeHead(302, { "Location": "https://github.com/saschanaz/mikine" });
+        response.end();
         return;
     }
+
+    response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
 
     let url;
     try {

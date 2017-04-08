@@ -1,3 +1,3 @@
 # mikine
 
-Heroku: https://mikine.herokuapp.com/
+[Mikine](https://mikine.herokuapp.com/) parses HTML tags from target page and returns corresponding JSON format.

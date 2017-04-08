@@ -74,7 +74,7 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
         }));
     }
     catch (e) {
-        console.log(`Fetching failed for ${target}`);
+        console.log(`Fetching failed for ${target}\nFailure message: ${e.message}`);
         response.end(JSON.stringify({
             error: `Failed to fetch ${target} because of network issue`,
             errorType: "network"

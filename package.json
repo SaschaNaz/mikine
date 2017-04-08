@@ -4,7 +4,8 @@
   "description": "Pixiv previewer for Twitter and Open Graph-supported services",
   "main": "output/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
   },
   "repository": {
     "type": "git",

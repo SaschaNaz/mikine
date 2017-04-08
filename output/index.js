@@ -97,6 +97,7 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
                 message: "No Twitter Card exists",
                 errorType: "normal",
             }));
+            return;
         }
         console.log(`Parser found a card for ${target}`);
         response.end(JSON.stringify({

@@ -96,6 +96,7 @@ http.createServer(async (request, response) => {
                 message: "No Twitter Card exists",
                 errorType: "normal",
             }))
+            return;
         }
         console.log(`Parser found a card for ${target}`);
         response.end(JSON.stringify({

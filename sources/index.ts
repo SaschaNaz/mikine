@@ -4,8 +4,6 @@ import * as cardinal from "card-inal";
 import fetch from "node-fetch";
 
 http.createServer(async (request, response) => {
-    response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-    
     console.log("Getting target...")
     const target = new URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
@@ -30,7 +28,11 @@ http.createServer(async (request, response) => {
 
     try {
         console.log(`Fetching ${target}`);
-        const fetchResponse = await fetch(target);
+        const fetchResponse = await fetch(target, {
+            "headers": {
+                "User-Agent": "Twitterbot/1.0 Mikine"
+            }
+        });
         if (!fetchResponse.ok) {
             console.log(`Fetching got non-ok sign`);
             response.end(JSON.stringify({

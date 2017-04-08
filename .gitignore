@@ -1,3 +1,5 @@
+robots-txt-cache/
+
 *.js.map
 
 .vscode/*

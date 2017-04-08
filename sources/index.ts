@@ -3,6 +3,15 @@ import { URLSearchParams, URL } from "url";
 import * as cardinal from "card-inal";
 import fetch from "node-fetch";
 
+
+import robots = require("robots-txt");
+import level = require("level");
+
+const bot = robots({
+    db: level('./robots-txt-cache'),
+    ttl: 1000 * 60 * 60 * 24 // one day
+});
+
 http.createServer(async (request, response) => {
     console.log("Getting target...")
     const target = new URL(request.url, "http://localhost").searchParams.get("target");
@@ -22,6 +31,15 @@ http.createServer(async (request, response) => {
         response.end(JSON.stringify({
             message: "Incorrect `target` URL.",
             errorType: "request"
+        }));
+        return;
+    }
+
+    const allowed = await bot.isAllowed("Twitterbot", target);
+    if (!allowed) {
+        response.end(JSON.stringify({
+            message: "Blocked by robots.txt",
+            errorType: "normal"
         }));
         return;
     }

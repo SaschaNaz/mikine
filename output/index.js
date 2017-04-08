@@ -12,6 +12,12 @@ const http = require("http");
 const url_1 = require("url");
 const cardinal = require("card-inal");
 const node_fetch_1 = require("node-fetch");
+const robots = require("robots-txt");
+const level = require("level");
+const bot = robots({
+    db: level('./robots-txt-cache'),
+    ttl: 1000 * 60 * 60 * 24 // one day
+});
 http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
     console.log("Getting target...");
     const target = new url_1.URL(request.url, "http://localhost").searchParams.get("target");
@@ -29,6 +35,14 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
         response.end(JSON.stringify({
             message: "Incorrect `target` URL.",
             errorType: "request"
+        }));
+        return;
+    }
+    const allowed = yield bot.isAllowed("Twitterbot", target);
+    if (!allowed) {
+        response.end(JSON.stringify({
+            message: "Blocked by robots.txt",
+            errorType: "normal"
         }));
         return;
     }

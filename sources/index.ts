@@ -23,38 +23,14 @@ http.createServer(async (request, response) => {
 
     response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
 
-    let url;
     try {
-        url = new URL(target);
+        // url check
+        new URL(target);
     }
     catch (e) {
         response.end(JSON.stringify({
             message: "Incorrect `target` URL.",
             errorType: "request"
-        }));
-        return;
-    }
-
-    let allowed;
-    try {
-        allowed = await bot.isAllowed("Twitterbot", target);
-    }
-    catch (e) {
-        if (e.status >= 500) {
-            response.end(JSON.stringify({
-                message: "Couldn't access robots.txt info to be allowed",
-                errorType: "network"
-            }));
-            return;
-        }
-        else {
-            allowed = true;
-        }
-    }
-    if (!allowed) {
-        response.end(JSON.stringify({
-            message: "Blocked by robots.txt",
-            errorType: "normal"
         }));
         return;
     }
@@ -75,12 +51,38 @@ http.createServer(async (request, response) => {
             }));
             return;
         }
-        console.log(`Fetching success for ${target}`);
+        console.log(`Fetching ok sign for ${target}`);
 
-        let card
+        let allowed;
+        try {
+            allowed = await bot.isAllowed("Twitterbot", fetchResponse.url);
+        }
+        catch (e) {
+            if (e.status >= 500) {
+                response.end(JSON.stringify({
+                    message: "Couldn't access robots.txt info to be allowed",
+                    errorType: "network"
+                }));
+                fetchResponse.timeout = 1; // close
+                return;
+            }
+            else {
+                allowed = true;
+            }
+        }
+        if (!allowed) {
+            response.end(JSON.stringify({
+                message: "Blocked by robots.txt",
+                errorType: "normal"
+            }));
+            fetchResponse.timeout = 1; // close
+            return;
+        }
+
+        let card;
         try {
             console.log(`Parsing...`);
-            card = cardinal.parse(await fetchResponse.text(), url.hostname);
+            card = cardinal.parse(await fetchResponse.text(), new URL(fetchResponse.url).hostname);
         }
         catch (e) {
             console.log(`Parser failed for ${target}`);

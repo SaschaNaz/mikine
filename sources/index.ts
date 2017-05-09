@@ -3,7 +3,6 @@ import { URLSearchParams, URL } from "url";
 import * as cardinal from "card-inal";
 import fetch from "node-fetch";
 
-
 import robots = require("robots-txt");
 import level = require("level");
 

@@ -1,5 +1,6 @@
 {
   "name": "mikine",
+  "private": true,
   "version": "0.0.1",
   "description": "Pixiv previewer for Twitter and Open Graph-supported services",
   "main": "output/index.js",

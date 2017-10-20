@@ -25,7 +25,7 @@
   "dependencies": {
     "@types/node": "^7.0.12",
     "@types/node-fetch": "^1.6.7",
-    "card-inal": "^1.3.6",
+    "card-inal": "^1.4.0",
     "level": "^1.6.0",
     "node-fetch": "^1.6.3",
     "robots-txt": "^1.0.0"

@@ -9,7 +9,7 @@
     "start": "node ."
   },
   "engines": {
-    "node": "7.x"
+    "node": "8.x"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "@types/node-fetch": "^1.6.7",
     "card-inal": "^1.5.1",
     "level": "^1.6.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.0.0-alpha.9",
     "robots-txt": "^1.0.0"
   }
 }

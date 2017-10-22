@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const http = require("http");
 const url_1 = require("url");
@@ -18,7 +10,7 @@ const bot = robots({
     db: level('./robots-txt-cache'),
     ttl: 1000 * 60 * 60 * 24 // one day
 });
-http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
+http.createServer(async (request, response) => {
     console.log("Getting target...");
     const target = new url_1.URL(request.url, "http://localhost").searchParams.get("target");
     if (!target) {
@@ -40,7 +32,7 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
     }
     try {
         console.log(`Fetching ${target}`);
-        const fetchResponse = yield node_fetch_1.default(target, {
+        const fetchResponse = await node_fetch_1.default(target, {
             "headers": {
                 "User-Agent": "Twitterbot/1.0 Mikine"
             }
@@ -57,7 +49,7 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
         console.log(`Fetching ok sign for ${target}`);
         let allowed;
         try {
-            allowed = yield bot.isAllowed("Twitterbot", fetchResponse.url);
+            allowed = await bot.isAllowed("Twitterbot", fetchResponse.url);
         }
         catch (e) {
             if (e.status >= 500) {
@@ -83,8 +75,7 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
         let card;
         try {
             console.log("Parsing...");
-            // No .arrraybuffer() method on node-fetch 1.x yet
-            card = cardinal.parse(new Uint8Array(yield fetchResponse.buffer()).buffer, new url_1.URL(fetchResponse.url).hostname);
+            card = cardinal.parse(await fetchResponse.arrayBuffer(), new url_1.URL(fetchResponse.url).hostname);
         }
         catch (e) {
             console.log(`Parser failed for ${target}`);
@@ -115,5 +106,5 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
             errorType: "network"
         }));
     }
-})).listen(process.env.PORT || 8080);
+}).listen(process.env.PORT || 8080);
 //# sourceMappingURL=index.js.map

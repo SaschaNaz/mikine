@@ -82,8 +82,9 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
         }
         let card;
         try {
-            console.log(`Parsing...`);
-            card = cardinal.parse(yield fetchResponse.text(), new url_1.URL(fetchResponse.url).hostname);
+            console.log("Parsing...");
+            // No .arrraybuffer() method on node-fetch 1.x yet
+            card = cardinal.parse(new Uint8Array(yield fetchResponse.buffer()).buffer, new url_1.URL(fetchResponse.url).hostname);
         }
         catch (e) {
             console.log(`Parser failed for ${target}`);
@@ -114,5 +115,5 @@ http.createServer((request, response) => __awaiter(this, void 0, void 0, functio
             errorType: "network"
         }));
     }
-})).listen(process.env.PORT);
+})).listen(process.env.PORT || 8080);
 //# sourceMappingURL=index.js.map

@@ -80,8 +80,9 @@ http.createServer(async (request, response) => {
 
         let card;
         try {
-            console.log(`Parsing...`);
-            card = cardinal.parse(await fetchResponse.text(), new URL(fetchResponse.url).hostname);
+            console.log("Parsing...");
+            // No .arrraybuffer() method on node-fetch 1.x yet
+            card = cardinal.parse(new Uint8Array(await fetchResponse.buffer()).buffer, new URL(fetchResponse.url).hostname);
         }
         catch (e) {
             console.log(`Parser failed for ${target}`);

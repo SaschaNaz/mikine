@@ -2,6 +2,8 @@ import * as http from "http";
 import { URLSearchParams, URL } from "url";
 import * as cardinal from "card-inal";
 import fetch from "node-fetch";
+import sniff = require("html-encoding-sniffer");
+import { TextDecoder } from "text-encoding"
 
 import robots = require("robots-txt");
 import level = require("level");
@@ -81,7 +83,9 @@ http.createServer(async (request, response) => {
         let card;
         try {
             console.log("Parsing...");
-            card = cardinal.parse(await (fetchResponse as any).arrayBuffer() as ArrayBuffer, new URL(fetchResponse.url).hostname);
+            const buffer = await fetchResponse.buffer();
+            const encoding = sniff(buffer, { defaultEncoding: "utf-8" });
+            card = cardinal.parse(new TextDecoder(encoding).decode(buffer), new URL(fetchResponse.url).hostname);
         }
         catch (e) {
             console.log(`Parser failed for ${target}`);

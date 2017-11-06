@@ -26,7 +26,7 @@
     "@types/node": "^7.0.12",
     "@types/node-fetch": "^1.6.7",
     "@types/text-encoding": "0.0.32",
-    "card-inal": "^1.5.1",
+    "card-inal": "^1.6.0",
     "html-encoding-sniffer": "^1.0.2",
     "level": "^1.6.0",
     "node-fetch": "^2.0.0-alpha.9",

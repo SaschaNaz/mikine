@@ -50,11 +50,8 @@ http.createServer(async (request, response) => {
         }
         const contentType = fetchResponse.headers.get("content-type");
         if (contentType && contentType !== "text/html") {
-            console.log(`Fetching non-html file, failure`);
-            response.end(JSON.stringify({
-                message: `Got non-html file`,
-                errorType: "header"
-            }));
+            closeConnectionWithoutCard(target, response, "Got a non-html file", "header");
+            closeFetch(fetchResponse);
             return;
         }
         console.log(`Fetching ok sign for ${target}`);
@@ -64,11 +61,8 @@ http.createServer(async (request, response) => {
         }
         catch (e) {
             if (e.status >= 500) {
-                response.end(JSON.stringify({
-                    message: "Couldn't access robots.txt info to be allowed",
-                    errorType: "network"
-                }));
-                fetchResponse.timeout = 1; // close
+                closeConnectionWithoutCard(target, response, "Couldn't access robots.txt info to be allowed", "network");
+                closeFetch(fetchResponse);
                 return;
             }
             else {
@@ -76,11 +70,8 @@ http.createServer(async (request, response) => {
             }
         }
         if (!allowed) {
-            response.end(JSON.stringify({
-                message: "Blocked by robots.txt",
-                errorType: "normal"
-            }));
-            fetchResponse.timeout = 1; // close
+            closeConnectionWithoutCard(target, response, "Blocked by robots.txt", "normal");
+            closeFetch(fetchResponse);
             return;
         }
         let card;
@@ -91,19 +82,11 @@ http.createServer(async (request, response) => {
             card = cardinal.parse(new text_encoding_1.TextDecoder(encoding).decode(buffer), new url_1.URL(fetchResponse.url).hostname);
         }
         catch (e) {
-            console.log(`Parser failed for ${target}`);
-            response.end(JSON.stringify({
-                message: e.message,
-                errorType: "card"
-            }));
+            closeConnectionWithoutCard(target, response, "Parser failed", "card", e);
             return;
         }
         if (!card) {
-            console.log(`Parser didn't find any cards for ${target}`);
-            response.end(JSON.stringify({
-                message: "No Twitter Card exists",
-                errorType: "normal",
-            }));
+            closeConnectionWithoutCard(target, response, "No Twitter Card exists", "normal");
             return;
         }
         console.log(`Parser found a card for ${target}`);
@@ -113,11 +96,17 @@ http.createServer(async (request, response) => {
         }));
     }
     catch (e) {
-        console.log(`Fetching failed for ${target}\nFailure message: ${e.message}`);
-        response.end(JSON.stringify({
-            error: `Failed to fetch ${target} because of network issue`,
-            errorType: "network"
-        }));
+        closeConnectionWithoutCard(target, response, "Fetching failed by network disruption", "network", e);
     }
 }).listen(process.env.PORT || 8080);
+function closeConnectionWithoutCard(target, serverResponse, message, errorType, errorEvent) {
+    console.log(`Target "${target}": ${message}\n${errorEvent ? `Failure message: ${errorEvent.message}` : ""}`);
+    serverResponse.end(JSON.stringify({
+        error: message,
+        errorType
+    }));
+}
+function closeFetch(fetchResponse) {
+    fetchResponse.timeout = 1; // close;
+}
 //# sourceMappingURL=index.js.map

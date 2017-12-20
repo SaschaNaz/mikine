@@ -12,6 +12,7 @@ const bot = robots({
     db: level('./robots-txt-cache'),
     ttl: 1000 * 60 * 60 * 24 // one day
 });
+const textHtml = /^text\/html(?:;)?/;
 http.createServer(async (request, response) => {
     console.log("Getting target...");
     const target = new url_1.URL(request.url, "http://localhost").searchParams.get("target");
@@ -49,7 +50,7 @@ http.createServer(async (request, response) => {
             return;
         }
         const contentType = fetchResponse.headers.get("content-type");
-        if (contentType && contentType !== "text/html") {
+        if (contentType && !contentType.match(textHtml)) {
             closeConnectionWithoutCard(target, response, "Got a non-html file", "header");
             closeFetch(fetchResponse);
             return;

@@ -48,6 +48,15 @@ http.createServer(async (request, response) => {
             }));
             return;
         }
+        const contentType = fetchResponse.headers.get("content-type");
+        if (contentType && contentType !== "text/html") {
+            console.log(`Fetching non-html file, failure`);
+            response.end(JSON.stringify({
+                message: `Got non-html file`,
+                errorType: "header"
+            }));
+            return;
+        }
         console.log(`Fetching ok sign for ${target}`);
         let allowed;
         try {
